@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import PropTypes from "prop-types";
 import { Card, CardHeader, CardBody } from "shards-react";
 import Chart from "../../utils/chart2";
@@ -34,6 +35,13 @@ class Dashboard extends React.Component {
                 scales: {
                     xAxes: [
                         {
+                            type: 'time',
+                            time: {
+                                unit: 'second',
+                                displayFormats: {
+                                    hour: 'HH:mm:ss'
+                                }
+                            },
                             ticks: {
                                 autoSkip: true,
                                 maxTicksLimit: 10
@@ -48,41 +56,22 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount() {
-        const socket = io('http://localhost:3002/2304');
-        socket.on('measurement', value =>{
+        const socket = io('http://192.168.0.32:3002/37ed3e20-6809-41c5-9c1d-380ca2155fa8_4d075988-07df-444b-bd38-2bbf0789a607');
+        socket.on('measurement', measurement => {
             const oldBtcDataSet = this.state.lineChartData.datasets[0];
             const newBtcDataSet = { ...oldBtcDataSet };
-            newBtcDataSet.data.push(value);
-      
+            //var value = moment().utc().seconds() % 4 === 0 ? null : value;
+            newBtcDataSet.data.push(measurement.value);
+
             const newChartData = {
-              ...this.state.lineChartData,
-              datasets: [newBtcDataSet],
-              labels: this.state.lineChartData.labels.concat(
-                new Date().toLocaleTimeString()
-              )
+                ...this.state.lineChartData,
+                datasets: [newBtcDataSet],
+                labels: this.state.lineChartData.labels.concat(
+                    moment(measurement.timestamp)
+                )
             };
             this.setState({ lineChartData: newChartData });
         })
-
-        /* this.ws.onmessage = e => {
-          const value = JSON.parse(e.data);
-          if (value.type !== "ticker") {
-            return;
-          }
-    
-          const oldBtcDataSet = this.state.lineChartData.datasets[0];
-          const newBtcDataSet = { ...oldBtcDataSet };
-          newBtcDataSet.data.push(value.price);
-    
-          const newChartData = {
-            ...this.state.lineChartData,
-            datasets: [newBtcDataSet],
-            labels: this.state.lineChartData.labels.concat(
-              new Date().toLocaleTimeString()
-            )
-          };
-          this.setState({ lineChartData: newChartData });
-        }; */
     }
 
     render() {
