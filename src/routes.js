@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import { DefaultLayout } from "./layouts";
 
 // Route Views
-import BlogOverview from "./views/BlogOverview";
+import Dashboard from "./views/Dashboard";
 import UserProfileLite from "./views/UserProfileLite";
 import AddNewPost from "./views/AddNewPost";
 
@@ -14,12 +14,12 @@ export default [
     path: "/",
     exact: true,
     layout: DefaultLayout,
-    component: () => <Redirect to="/blog-overview" />
+    component: () => <Redirect to="/dashboard" />
   },
   {
-    path: "/blog-overview",
+    path: "/dashboard",
     layout: DefaultLayout,
-    component: BlogOverview
+    component: Dashboard
   },
   {
     path: "/add-new-post",

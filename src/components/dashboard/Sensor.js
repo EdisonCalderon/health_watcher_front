@@ -5,7 +5,7 @@ import { Card, CardHeader, CardBody } from "shards-react";
 import Chart from "../../utils/chart2";
 import io from 'socket.io-client';
 
-class Dashboard extends React.Component {
+class Sensor extends React.Component {
     constructor(props) {
         super(props);
 
@@ -92,12 +92,12 @@ class Dashboard extends React.Component {
     }
 }
 
-Dashboard.propTypes = {
+Sensor.propTypes = {
     title: PropTypes.string
 };
 
-Dashboard.defaultProps = {
+Sensor.defaultProps = {
     title: "Ejemplo Bitcoin"
 };
 
-export default Dashboard;
+export default Sensor;

@@ -2,59 +2,55 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Container, Row, Col } from "shards-react";
 
-import PageTitle from "./../components/common/PageTitle";
+import ContextSelector from "./../components/dashboard/ContextSelector";
 import SmallStats from "./../components/common/SmallStats";
-import Dashboard from "./../components/blog/Dashboard";
-import UsersByDevice from "./../components/blog/UsersByDevice";
+import Sensor from "./../components/dashboard/Sensor";
 
-const BlogOverview = ({ smallStats }) => (
-  <Container fluid className="main-content-container px-4">
-    {/* Page Header */}
-    <Row noGutters className="page-header py-4">
-      <PageTitle title="Blog Overview" subtitle="Dashboard" className="text-sm-left mb-3" />
-    </Row>
+class Dashboard extends React.Component {
+  render() {
+    const { smallStats } = this.props
+    return (
+      <Container fluid className="main-content-container px-4">
+        <Row noGutters className="page-header py-4">
+          <ContextSelector />
+        </Row>
 
-    {/* Small Stats Blocks */}
-    <Row>
-      {smallStats.map((stats, idx) => (
-        <Col className="col-lg mb-4" key={idx} {...stats.attrs}>
-          <SmallStats
-            id={`small-stats-${idx}`}
-            variation="1"
-            chartData={stats.datasets}
-            chartLabels={stats.chartLabels}
-            label={stats.label}
-            value={stats.value}
-            percentage={stats.percentage}
-            increase={stats.increase}
-            decrease={stats.decrease}
-          />
-        </Col>
-      ))}
-    </Row>
+        <Row>
+          {smallStats.map((stats, idx) => (
+            <Col className="col-lg mb-4" key={idx} {...stats.attrs}>
+              <SmallStats
+                id={`small-stats-${idx}`}
+                variation="1"
+                chartData={stats.datasets}
+                chartLabels={stats.chartLabels}
+                label={stats.label}
+                value={stats.value}
+                percentage={stats.percentage}
+                increase={stats.increase}
+                decrease={stats.decrease}
+              />
+            </Col>
+          ))}
+        </Row>
 
-    <Row>
-      {/* Users Overview */}
-      <Col lg="8" md="12" sm="12" className="mb-4">
-        <Dashboard />
-      </Col>
+        <Row>
+          <Col lg="6" md="12" sm="12" className="mb-4">
+            <Sensor />
+          </Col>
 
-      {/* Users by Device */}
-      <Col lg="4" md="6" sm="12" className="mb-4">
-        <UsersByDevice />
-      </Col>
-    </Row>
-  </Container>
-);
-
-BlogOverview.propTypes = {
-  /**
-   * The small stats dataset.
-   */
+          <Col lg="4" md="6" sm="12" className="mb-4">
+            
+          </Col>
+        </Row>
+      </Container>
+    )
+  }
+}
+Dashboard.propTypes = {
   smallStats: PropTypes.array
 };
 
-BlogOverview.defaultProps = {
+Dashboard.defaultProps = {
   smallStats: [
     {
       label: "Posts",
@@ -152,4 +148,4 @@ BlogOverview.defaultProps = {
   ]
 };
 
-export default BlogOverview;
+export default Dashboard;
