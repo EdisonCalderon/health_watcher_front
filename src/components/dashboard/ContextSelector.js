@@ -8,7 +8,6 @@ class ContextSelector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      subtitle: 'Dashboard',
       isSelected: false,
       classes: classNames(
         "text-sm-left mb-3",
@@ -26,7 +25,7 @@ class ContextSelector extends React.Component {
   }
 
   handleChange = (selected) => {
-    this.setState((state, props) => ({ selected, isSelected: !state.isSelected }))
+    this.setState((state, props) => ({ selected, isSelected: !state.isSelected }), () => this.props.changeContext(selected))
   }
 
   switchSelect = () => {
@@ -41,7 +40,7 @@ class ContextSelector extends React.Component {
         {(isSelected) ?
           <div>
             <h3 className="page-title" onClick={this.switchSelect}>
-              {selected.label} <i class="material-icons">edit</i>
+              {selected.label} <i className="material-icons">edit</i>
             </h3>
           </div> :
           <Select

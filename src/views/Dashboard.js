@@ -1,3 +1,4 @@
+import Axios from "axios";
 import React from "react";
 import PropTypes from "prop-types";
 import { Container, Row, Col } from "shards-react";
@@ -7,12 +8,24 @@ import SmallStats from "./../components/common/SmallStats";
 import Sensor from "./../components/dashboard/Sensor";
 
 class Dashboard extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
+  changeContext = async (context) => {
+    this.setState({ context: null })
+    let context_detail = (await Axios.get(`/context/${context.value}`)).data
+    this.setState({ context: context_detail })
+  }
+
   render() {
     const { smallStats } = this.props
+    const { context } = this.state
     return (
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="page-header py-4">
-          <ContextSelector />
+          <ContextSelector changeContext={this.changeContext} />
         </Row>
 
         <Row>
@@ -34,13 +47,13 @@ class Dashboard extends React.Component {
         </Row>
 
         <Row>
-          <Col lg="6" md="12" sm="12" className="mb-4">
-            <Sensor />
-          </Col>
-
-          <Col lg="4" md="6" sm="12" className="mb-4">
-            
-          </Col>
+          {
+            context && context.sensors.map((sensor, i) => {
+              return  <Col lg="6" md="12" sm="12" className="mb-4" key={i}>
+                <Sensor metadata={{context: context.id,  ...sensor}} />
+              </Col>
+            })
+          }
         </Row>
       </Container>
     )

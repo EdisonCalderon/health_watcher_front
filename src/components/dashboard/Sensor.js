@@ -1,5 +1,4 @@
 import React from "react";
-import moment from "moment";
 import PropTypes from "prop-types";
 import { Card, CardHeader, CardBody } from "shards-react";
 import Chart from "../../utils/chart2";
@@ -10,6 +9,7 @@ class Sensor extends React.Component {
         super(props);
 
         this.state = {
+            index : 0,
             lineChartData: {
                 labels: [],
                 datasets: [
@@ -49,28 +49,25 @@ class Sensor extends React.Component {
                         }
                     ]
                 }
-            }
+            },
+            metadata: this.props.metadata
         }
 
         this.canvasRef = React.createRef();
     }
 
     componentDidMount() {
-        const socket = io('http://192.168.0.32:3002/37ed3e20-6809-41c5-9c1d-380ca2155fa8_4d075988-07df-444b-bd38-2bbf0789a607');
+        const { metadata } = this.state
+        const socket = io(`/${metadata.context}_${metadata.id}`)
         socket.on('measurement', measurement => {
-            const oldBtcDataSet = this.state.lineChartData.datasets[0];
-            const newBtcDataSet = { ...oldBtcDataSet };
-            //var value = moment().utc().seconds() % 4 === 0 ? null : value;
-            newBtcDataSet.data.push(measurement.value);
-
-            const newChartData = {
-                ...this.state.lineChartData,
-                datasets: [newBtcDataSet],
-                labels: this.state.lineChartData.labels.concat(
-                    moment(measurement.timestamp)
-                )
-            };
-            this.setState({ lineChartData: newChartData });
+            const insertIntoDataset = (datasets, index, value) => { return datasets[index].data.push(value) && datasets }
+            this.setState((state, props) => ({
+                lineChartData: {
+                    ...state.lineChartData,
+                    datasets: insertIntoDataset(state.lineChartData.datasets, state.index, measurement.value),
+                    labels: [...state.lineChartData.labels, measurement.timestamp]
+                }
+            }))
         })
     }
 
@@ -93,7 +90,8 @@ class Sensor extends React.Component {
 }
 
 Sensor.propTypes = {
-    title: PropTypes.string
+    title: PropTypes.string,
+    metadata: PropTypes.object
 };
 
 Sensor.defaultProps = {
