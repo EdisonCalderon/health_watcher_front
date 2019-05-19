@@ -21,7 +21,7 @@ class ContextSelector extends React.Component {
   async componentDidMount() {
     let contexts = (await Axios.get('/context')).data
     let options = contexts.map(x => { return { value: x.id, label: x.name } })
-    this.setState({ options })
+    this.setState({ options }, () => this.handleChange(options[0]))
   }
 
   handleChange = (selected) => {
@@ -35,7 +35,7 @@ class ContextSelector extends React.Component {
   render() {
     const { classes, isSelected, selected, options } = this.state;
     return (
-      <Col xs="12" sm="4" className={classes} style={{zIndex: 2}}>
+      <Col xs="12" sm="4" className={classes} style={{ zIndex: 2 }}>
         <span className="text-uppercase page-subtitle">Dashboard</span>
         {(isSelected) ?
           <div>

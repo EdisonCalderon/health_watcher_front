@@ -1,5 +1,6 @@
 import React from "react";
 import { Nav } from "shards-react";
+import { logout } from '../../../utils/auth'
 
 import SidebarNavItem from "./SidebarNavItem";
 import { Store } from "../../../flux";
@@ -38,6 +39,12 @@ class SidebarNavItems extends React.Component {
           {items.map((item, idx) => (
             <SidebarNavItem key={idx} item={item} />
           ))}
+          <SidebarNavItem key="login" item={{
+            title: "Cerrar Sesión",
+            htmlBefore: '<i class="material-icons">exit_to_app</i>',
+            to: "/login",
+            onClick: logout
+          }} />
         </Nav>
       </div>
     )

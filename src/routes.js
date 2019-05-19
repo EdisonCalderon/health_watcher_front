@@ -2,14 +2,20 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 // Layout Types
-import { DefaultLayout } from "./layouts";
+import { DefaultLayout, SimpleLayout } from "./layouts";
 
 // Route Views
+import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
 import UserProfileLite from "./views/UserProfileLite";
 import AddNewPost from "./views/AddNewPost";
 
 export default [
+  {
+    path: "/login",
+    layout: SimpleLayout,
+    component: Login
+  },
   {
     path: "/",
     exact: true,
