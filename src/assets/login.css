@@ -1,0 +1,7 @@
+.login {
+    _margin-left: 50px;
+    _margin-top: 10%;
+    _min-height: calc(100vh - 70px);
+    margin: 20% 10% 20% 10%;
+    padding: 5% 10% 5% 10%;
+}

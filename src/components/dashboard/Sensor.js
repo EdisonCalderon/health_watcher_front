@@ -15,7 +15,7 @@ class Sensor extends React.Component {
                 datasets: [
                     {
                         type: "line",
-                        label: "BTC-USD",
+                        label: "Pulso",
                         backgroundColor: "rgba(0, 0, 0, 0)",
                         borderColor: "rgba(0,123,255,0.9)",
                         pointBackgroundColor: "rgba(0,123,255,0.9)",
@@ -95,7 +95,7 @@ Sensor.propTypes = {
 };
 
 Sensor.defaultProps = {
-    title: "Ejemplo Bitcoin"
+    title: "Pulsómetro"
 };
 
 export default Sensor;

@@ -4,7 +4,7 @@ import { NavLink as RouteNavLink } from "react-router-dom";
 import { NavItem, NavLink } from "shards-react";
 
 const SidebarNavItem = ({ item }) => (
-  <NavItem>
+  <NavItem onClick={item.onClick}>
     <NavLink tag={RouteNavLink} to={item.to}>
       {item.htmlBefore && (
         <div
