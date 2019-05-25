@@ -19,7 +19,8 @@ class ContextSelector extends React.Component {
   }
 
   async componentDidMount() {
-    let contexts = (await Axios.get('/context')).data
+    const baseURL = process.env.REACT_APP_API_URL || ""
+    let contexts = (await Axios.get(`${baseURL}/context`)).data
     let options = contexts.map(x => { return { value: x.id, label: x.name } })
     this.setState({ options }, () => this.handleChange(options[0]))
   }

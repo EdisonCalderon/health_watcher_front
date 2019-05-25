@@ -17,7 +17,8 @@ class Dashboard extends React.Component {
 
   changeContext = async (context) => {
     this.setState({ context: null })
-    let context_detail = (await Axios.get(`/context/${context.value}`)).data
+    const baseURL = process.env.REACT_APP_API_URL || ""
+    let context_detail = (await Axios.get(`${baseURL}/context/${context.value}`)).data
     this.setState({ context: context_detail })
   }
 
