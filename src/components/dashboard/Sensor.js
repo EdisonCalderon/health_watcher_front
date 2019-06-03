@@ -61,11 +61,11 @@ class Sensor extends React.Component {
         const baseURL = process.env.REACT_APP_API_URL || ""
         const socket = io(`${baseURL}/${metadata.context}_${metadata.id}`)
         socket.on('measurement', measurement => {
-            const insertIntoDataset = (datasets, index, value) => { return datasets[index].data.push(value) && datasets }
+            const insertIntoDataset = (datasets, index, signal) => { return datasets[index].data.push(signal) && datasets }
             this.setState((state, props) => ({
                 lineChartData: {
                     ...state.lineChartData,
-                    datasets: insertIntoDataset(state.lineChartData.datasets, state.index, measurement.value),
+                    datasets: insertIntoDataset(state.lineChartData.datasets, state.index, measurement.signal),
                     labels: [...state.lineChartData.labels, measurement.timestamp]
                 }
             }))
