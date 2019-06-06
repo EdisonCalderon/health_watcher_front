@@ -16,8 +16,12 @@ class Dashboard extends React.Component {
   }
 
   changeContext = async (context) => {
+    const { smallStats } = this.props
     this.setState({ context: null })
     let context_detail = (await Axios.get(`/context/${context.value}`)).data
+    smallStats[0].value = context_detail.sensors.length
+    smallStats[1].value = context_detail.actuators.length
+    smallStats[2].value = (context_detail.enabled ) ? 'Activo' : 'Inactivo'
     this.setState({ context: context_detail })
   }
 
@@ -70,7 +74,7 @@ Dashboard.defaultProps = {
   smallStats: [
     {
       label: "Sensores",
-      value: "1"
+      value: "0"
     },
     {
       label: "Actuadores",
@@ -78,7 +82,7 @@ Dashboard.defaultProps = {
     },
     {
       label: "Estado",
-      value: "Activo"
+      value: "Inactivo"
     },
     {
       label: "Alertas",
