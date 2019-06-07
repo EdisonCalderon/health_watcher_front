@@ -68,8 +68,9 @@ class Sensor extends React.Component {
                 return dataset.push(signal) && datasets 
             }
             const insertIntoLabels = (labels, timestamp) => {
-                if (labels.length >= maxMeasurements) labels.shift()
-                return labels.push(timestamp) && labels
+                var _labels = [ ...labels]
+                if (_labels.length >= maxMeasurements) _labels.shift()
+                return _labels.push(timestamp) && _labels
             }
             this.setState((state, props) => ({
                 lineChartData: {
