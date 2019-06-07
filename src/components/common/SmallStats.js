@@ -4,22 +4,9 @@ import classNames from "classnames";
 import { Card, CardBody } from "shards-react";
 
 class SmallStats extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      button_state : props.button && props.button.init
-    }
-  }
-
-  updateState = () => {
-    var new_state = !this.state.button_state
-    this.setState({ button_state: new_state })
-    this.props.button.action()
-  }
 
   render() {
     const { variation, label, value, button } = this.props;
-    const { button_state } = this.state;
 
     const cardClasses = classNames(
       "stats-small",
@@ -53,9 +40,9 @@ class SmallStats extends React.Component {
     );
 
     var button_render = (!button) ? '' :
-      (button_state) ?
-        <button type="button" className="btn btn-danger active-accent" onClick={this.updateState}>Detener</button>
-        : <button type="button" className="btn btn-success active-accent" onClick={this.updateState}>Iniciar</button>
+      (button && button.init) ?
+        <button type="button" className="btn btn-danger active-accent" onClick={button.action}>Detener</button>
+        : <button type="button" className="btn btn-success active-accent" onClick={button.action}>Iniciar</button>
 
     return (
       <Card small className={cardClasses}>

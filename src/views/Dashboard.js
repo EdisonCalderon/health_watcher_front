@@ -15,17 +15,20 @@ class Dashboard extends React.Component {
     this.state = {
       smallStats: JSON.parse(JSON.stringify(props.smallStats)) 
     }
+    this.baseURL = process.env.REACT_APP_API_URL || ""
   }
 
   changeContext = async (context) => {
     this.setState({ context: null, smallStats: JSON.parse(JSON.stringify(this.props.smallStats)) })
-    const baseURL = process.env.REACT_APP_API_URL || ""
-    let context_detail = (await Axios.get(`${baseURL}/context/${context.value}`)).data
+    let context_detail = (await Axios.get(`${this.baseURL}/context/${context.value}`)).data
     this.setState({ context: context_detail }, () => this.updateStats())
   }
 
-  turnEnabledConext = () => {
-    this.setState((state, props) => ({ context: { ...state.context, enabled: !state.context.enabled } }))
+  turnEnabledContext = async() => {
+    var { context } = this.state 
+    var new_state = !context.enabled
+    await Axios.patch(`${this.baseURL}/context/${context.id}`, { enabled: new_state })
+    this.setState({ context: { ...context, enabled: new_state } }, () => this.updateStats())
   }
 
   updateStats = () => {
@@ -33,7 +36,7 @@ class Dashboard extends React.Component {
     smallStats[0].value = context.sensors.length
     smallStats[1].value = context.actuators.length
     smallStats[2].value = (context.enabled) ? 'Activo' : 'Inactivo'
-    smallStats[2].button = { action: this.turnEnabledConext, init: context.enabled }
+    smallStats[2].button = { action: this.turnEnabledContext, init: context.enabled }
     this.setState({ smallStats })
   }
 
@@ -95,10 +98,6 @@ Dashboard.defaultProps = {
     {
       label: "Estado",
       value: "Inactivo"
-    },
-    {
-      label: "Alertas",
-      value: "0"
     }
   ]
 };

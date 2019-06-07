@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect } from 'react-router-dom';
 import {
-  Container, Row, Card,
+  Card,
   CardHeader,
   ListGroup,
   ListGroupItem,
