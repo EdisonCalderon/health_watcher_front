@@ -4,8 +4,22 @@ import classNames from "classnames";
 import { Card, CardBody } from "shards-react";
 
 class SmallStats extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      button_state : props.button && props.button.init
+    }
+  }
+
+  updateState = () => {
+    var new_state = !this.state.button_state
+    this.setState({ button_state: new_state })
+    this.props.button.action()
+  }
+
   render() {
-    const { variation, label, value } = this.props;
+    const { variation, label, value, button } = this.props;
+    const { button_state } = this.state;
 
     const cardClasses = classNames(
       "stats-small",
@@ -38,6 +52,11 @@ class SmallStats extends React.Component {
       variation === "1" ? "my-3" : "m-0"
     );
 
+    var button_render = (!button) ? '' :
+      (button_state) ?
+        <button type="button" className="btn btn-danger active-accent" onClick={this.updateState}>Detener</button>
+        : <button type="button" className="btn btn-success active-accent" onClick={this.updateState}>Iniciar</button>
+
     return (
       <Card small className={cardClasses}>
         <CardBody className={cardBodyClasses}>
@@ -45,6 +64,7 @@ class SmallStats extends React.Component {
             <div className={dataFieldClasses}>
               <span className={labelClasses}>{label}</span>
               <h6 className={valueClasses}>{value}</h6>
+              {button_render}
             </div>
           </div>
         </CardBody>
@@ -62,6 +82,7 @@ SmallStats.propTypes = {
    * The value.
    */
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  button: PropTypes.any
 };
 
 SmallStats.defaultProps = {

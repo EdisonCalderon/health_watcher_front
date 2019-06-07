@@ -12,24 +12,34 @@ import Sensor from "./../components/dashboard/Sensor";
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      smallStats: JSON.parse(JSON.stringify(props.smallStats)) 
+    }
   }
 
   changeContext = async (context) => {
-    const { smallStats } = this.props
-    this.setState({ context: null })
+    this.setState({ context: null, smallStats: JSON.parse(JSON.stringify(this.props.smallStats)) })
     const baseURL = process.env.REACT_APP_API_URL || ""
     let context_detail = (await Axios.get(`${baseURL}/context/${context.value}`)).data
-    smallStats[0].value = context_detail.sensors.length
-    smallStats[1].value = context_detail.actuators.length
-    smallStats[2].value = (context_detail.enabled ) ? 'Activo' : 'Inactivo'
-    this.setState({ context: context_detail })
+    this.setState({ context: context_detail }, () => this.updateStats())
+  }
+
+  turnEnabledConext = () => {
+    this.setState((state, props) => ({ context: { ...state.context, enabled: !state.context.enabled } }))
+  }
+
+  updateStats = () => {
+    const { context, smallStats } = this.state
+    smallStats[0].value = context.sensors.length
+    smallStats[1].value = context.actuators.length
+    smallStats[2].value = (context.enabled) ? 'Activo' : 'Inactivo'
+    smallStats[2].button = { action: this.turnEnabledConext, init: context.enabled }
+    this.setState({ smallStats })
   }
 
   render() {
-    if (!isLoggedIn()) return <Redirect to="/login" />; 
-    const { smallStats } = this.props
-    const { context } = this.state
+    if (!isLoggedIn()) return <Redirect to="/login" />;
+    const { context, smallStats } = this.state
     return (
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="page-header py-4">
@@ -44,6 +54,7 @@ class Dashboard extends React.Component {
                 variation="1"
                 chartData={stats.datasets}
                 chartLabels={stats.chartLabels}
+                button={stats.button}
                 label={stats.label}
                 value={stats.value}
                 percentage={stats.percentage}
@@ -57,8 +68,8 @@ class Dashboard extends React.Component {
         <Row>
           {
             context && context.sensors.map((sensor, i) => {
-              return  <Col lg="6" md="12" sm="12" className="mb-4" key={i}>
-                <Sensor metadata={{context: context.id,  ...sensor}} />
+              return <Col lg="6" md="12" sm="12" className="mb-4" key={i}>
+                <Sensor metadata={{ context: context.id, ...sensor }} />
               </Col>
             })
           }
