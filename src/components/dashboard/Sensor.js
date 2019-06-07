@@ -10,6 +10,7 @@ class Sensor extends React.Component {
 
         this.state = {
             index : 0,
+            maxMeasurements: 150,
             lineChartData: {
                 labels: [],
                 datasets: [
@@ -57,16 +58,24 @@ class Sensor extends React.Component {
     }
 
     componentDidMount() {
-        const { metadata } = this.state
+        const { metadata, maxMeasurements } = this.state
         const baseURL = process.env.REACT_APP_API_URL || ""
         const socket = io(`${baseURL}/${metadata.context}_${metadata.id}`)
         socket.on('measurement', measurement => {
-            const insertIntoDataset = (datasets, index, signal) => { return datasets[index].data.push(signal) && datasets }
+            const insertIntoDataset = (datasets, index, signal) => { 
+                var dataset = datasets[index].data
+                if (dataset.length >= maxMeasurements) dataset.shift()
+                return dataset.push(signal) && datasets 
+            }
+            const insertIntoLabels = (labels, timestamp) => {
+                if (labels.length >= maxMeasurements) labels.shift()
+                return labels.push(timestamp) && labels
+            }
             this.setState((state, props) => ({
                 lineChartData: {
                     ...state.lineChartData,
                     datasets: insertIntoDataset(state.lineChartData.datasets, state.index, measurement.signal),
-                    labels: [...state.lineChartData.labels, measurement.timestamp]
+                    labels: insertIntoLabels(state.lineChartData.labels, measurement.timestamp)
                 }
             }))
         })
