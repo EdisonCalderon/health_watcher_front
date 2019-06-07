@@ -4,8 +4,9 @@ import classNames from "classnames";
 import { Card, CardBody } from "shards-react";
 
 class SmallStats extends React.Component {
+
   render() {
-    const { variation, label, value } = this.props;
+    const { variation, label, value, button } = this.props;
 
     const cardClasses = classNames(
       "stats-small",
@@ -38,6 +39,11 @@ class SmallStats extends React.Component {
       variation === "1" ? "my-3" : "m-0"
     );
 
+    var button_render = (!button) ? '' :
+      (button && button.init) ?
+        <button type="button" className="btn btn-danger active-accent" onClick={button.action}>Detener</button>
+        : <button type="button" className="btn btn-success active-accent" onClick={button.action}>Iniciar</button>
+
     return (
       <Card small className={cardClasses}>
         <CardBody className={cardBodyClasses}>
@@ -45,6 +51,7 @@ class SmallStats extends React.Component {
             <div className={dataFieldClasses}>
               <span className={labelClasses}>{label}</span>
               <h6 className={valueClasses}>{value}</h6>
+              {button_render}
             </div>
           </div>
         </CardBody>
@@ -62,6 +69,7 @@ SmallStats.propTypes = {
    * The value.
    */
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  button: PropTypes.any
 };
 
 SmallStats.defaultProps = {

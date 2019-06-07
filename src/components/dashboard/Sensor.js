@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Card, CardHeader, CardBody } from "shards-react";
 import Chart from "../../utils/chart2";
 import io from 'socket.io-client';
@@ -16,7 +15,7 @@ class Sensor extends React.Component {
                 datasets: [
                     {
                         type: "line",
-                        label: "Pulso",
+                        label: props.metadata.name,
                         backgroundColor: "rgba(0, 0, 0, 0)",
                         borderColor: "rgba(0,123,255,0.9)",
                         pointBackgroundColor: "rgba(0,123,255,0.9)",
@@ -61,6 +60,7 @@ class Sensor extends React.Component {
         const { metadata, maxMeasurements } = this.state
         const baseURL = process.env.REACT_APP_API_URL || ""
         const socket = io(`${baseURL}/${metadata.context}_${metadata.id}`)
+        this.setState({socket})
         socket.on('measurement', measurement => {
             const insertIntoDataset = (datasets, index, signal) => { 
                 var dataset = datasets[index].data
@@ -82,12 +82,17 @@ class Sensor extends React.Component {
         })
     }
 
+    componentWillUnmount () {
+        var { socket } = this.state
+        socket.disconnect()
+    }
+
     render() {
-        const { title } = this.props;
+        const { metadata } = this.state;
         return (
             <Card small className="h-100">
                 <CardHeader className="border-bottom">
-                    <h6 className="m-0">{title}</h6>
+                    <h6 className="m-0">{metadata.name}</h6>
                 </CardHeader>
                 <CardBody className="pt-0">
                     <Chart
@@ -99,14 +104,5 @@ class Sensor extends React.Component {
         );
     }
 }
-
-Sensor.propTypes = {
-    title: PropTypes.string,
-    metadata: PropTypes.object
-};
-
-Sensor.defaultProps = {
-    title: "Pulsómetro"
-};
 
 export default Sensor;
