@@ -2,7 +2,7 @@
   "name": "shards-dashboard-lite-react",
   "version": "1.0.0",
   "private": true,
-  "proxy": "http://healthwatcherapi-env.etmceaupep.us-east-1.elasticbeanstalk.com/",
+  "proxy": "http://localhost:3001",
   "dependencies": {
     "axios": "^0.18.0",
     "camelize": "^1.0.0",
@@ -20,6 +20,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
     "react-select": "^2.4.3",
+    "react-toastify": "^5.2.1",
     "shards-react": "^1.0.3",
     "shortid": "^2.2.14",
     "socket.io-client": "^2.2.0"
