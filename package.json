@@ -29,6 +29,7 @@
     "start": "react-scripts start",
     "build:prod": "cross-env REACT_APP_BASENAME=/demo/shards-dashboard-lite-react REACT_APP_GAID=UA-115105611-1 npm run build",
     "build": "cross-env REACT_APP_API_URL=http://healthwatcherapi-env.etmceaupep.us-east-1.elasticbeanstalk.com react-scripts build",
+    "build:docker_test": "cross-env REACT_APP_API_URL=http://api:80 react-scripts build",
     "deploy": "aws s3 sync build/ s3://health-watcher-front",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
